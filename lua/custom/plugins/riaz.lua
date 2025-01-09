@@ -2,6 +2,9 @@
 vim.keymap.set('i', 'jk', '<Esc>')
 vim.keymap.set('i', ';;', '<Esc>A;')
 vim.keymap.set('n', '<leader>pv', ':Ex<Enter>')
+vim.keymap.set('n', '<S-Tab>', ':bp<Enter>', { desc = 'Go to previous buffer' })
+vim.keymap.set('n', '<Tab>', ':bn<Enter>', { desc = 'Go to next buffer' })
+vim.keymap.set('n', '<leader>b', '<C-6>', { desc = 'Go the most recently opened buffer' })
 
 -- Create an autocmd for C# files
 vim.api.nvim_create_autocmd('FileType', {
