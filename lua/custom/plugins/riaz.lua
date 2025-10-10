@@ -1,5 +1,6 @@
 -- NOTE personal keymap
 vim.keymap.set('i', 'jk', '<Esc>')
+vim.keymap.set('v', 'jk', '<Esc>')
 vim.keymap.set('i', ';;', '<Esc>A;')
 vim.keymap.set('n', '<leader>pv', ':Ex<Enter>')
 vim.keymap.set('n', '<S-Tab>', ':bp<Enter>', { desc = 'Go to previous buffer' })
@@ -11,6 +12,10 @@ vim.keymap.set('n', '<A-Left>', '2<C-w><', { desc = 'Decrease window width' })
 vim.keymap.set('n', '<A-Right>', '2<C-w>>', { desc = 'Increase window width' })
 vim.keymap.set('n', '<A-Up>', '2<C-w>+', { desc = 'Increase window height' })
 vim.keymap.set('n', '<A-Down>', '2<C-w>-', { desc = 'Decrease window height' })
+
+-- Move selected lines up/down
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv")
 
 -- Create an autocmd for C# files
 vim.api.nvim_create_autocmd('FileType', {
