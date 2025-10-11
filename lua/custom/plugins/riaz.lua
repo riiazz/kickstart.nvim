@@ -1,6 +1,6 @@
 -- NOTE personal keymap
 vim.keymap.set('i', 'jk', '<Esc>')
-vim.keymap.set('v', 'jk', '<Esc>')
+vim.keymap.set('x', 'v', '<Esc>')
 vim.keymap.set('i', ';;', '<Esc>A;')
 vim.keymap.set('n', '<leader>pv', ':Ex<Enter>')
 vim.keymap.set('n', '<S-Tab>', ':bp<Enter>', { desc = 'Go to previous buffer' })
