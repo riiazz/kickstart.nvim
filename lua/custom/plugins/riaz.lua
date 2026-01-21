@@ -37,30 +37,30 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
-local lspconfig = require 'lspconfig'
-
-lspconfig.csharp_ls.setup {
-  root_dir = function()
-    return vim.loop.cwd()
-  end,
-  autostart = false,
-  single_file_support = true,
-
-  settings = {
-    csharp = {
-      watchForChanges = false,
-      diagnostics = {
-        enable = true,
-      },
-      exclude = {
-        '**/bin/**',
-        '**/obj/**',
-        '**/.git/**',
-        '**/node_modules/**',
-        '**/node_modules/**',
-      },
-    },
-  },
-}
+-- local lspconfig = require 'lspconfig'
+--
+-- lspconfig.csharp_ls.setup {
+--   root_dir = function()
+--     return vim.loop.cwd()
+--   end,
+--   autostart = false,
+--   single_file_support = true,
+--
+--   settings = {
+--     csharp = {
+--       watchForChanges = false,
+--       diagnostics = {
+--         enable = true,
+--       },
+--       exclude = {
+--         '**/bin/**',
+--         '**/obj/**',
+--         '**/.git/**',
+--         '**/node_modules/**',
+--         '**/node_modules/**',
+--       },
+--     },
+--   },
+-- }
 
 return {}
