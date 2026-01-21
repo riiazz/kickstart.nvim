@@ -18,7 +18,7 @@ return {
     'nvim-neotest/nvim-nio',
 
     -- Installs the debug adapters for you
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
@@ -55,14 +55,14 @@ return {
       desc = 'Debug: Step Out',
     },
     {
-      '<leader>b',
+      '<F9>',
       function()
         require('dap').toggle_breakpoint()
       end,
       desc = 'Debug: Toggle Breakpoint',
     },
     {
-      '<leader>B',
+      '<space><F9>',
       function()
         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
       end,
@@ -144,5 +144,49 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+
+    -- dap.configurations.cs = {
+    --   {
+    --     type = 'coreclr',
+    --     name = 'Launch - .NET',
+    --     request = 'launch',
+    --     -- program = function()
+    --     --   return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+    --     -- end,
+    --     program = function()
+    --       local co = coroutine.running()
+    --       return coroutine.create(function()
+    --         local actions = require 'telescope.actions'
+    --         local action_state = require 'telescope.actions.state'
+    --         local pickers = require 'telescope.pickers'
+    --         local finders = require 'telescope.finders'
+    --         local conf = require('telescope.config').values
+    --
+    --         local dlls = vim.fn.globpath(vim.fn.getcwd() .. '/bin/Debug', '**/*.dll', false, true)
+    --
+    --         pickers
+    --           .new({}, {
+    --             prompt_title = 'Select .NET DLL',
+    --             finder = finders.new_table(dlls),
+    --             sorter = conf.generic_sorter {},
+    --             attach_mappings = function(_, map)
+    --               map('i', '<CR>', function(bufnr)
+    --                 local selection = action_state.get_selected_entry()
+    --                 actions.close(bufnr)
+    --                 coroutine.resume(co, selection[1])
+    --               end)
+    --               map('n', '<CR>', function(bufnr)
+    --                 local selection = action_state.get_selected_entry()
+    --                 actions.close(bufnr)
+    --                 coroutine.resume(co, selection[1])
+    --               end)
+    --               return true
+    --             end,
+    --           })
+    --           :find()
+    --       end)
+    --     end,
+    --   },
+    -- }
   end,
 }
