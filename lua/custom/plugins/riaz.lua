@@ -36,7 +36,6 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.bo.commentstring = '//%s'
   end,
 })
-
 -- local lspconfig = require 'lspconfig'
 --
 -- lspconfig.csharp_ls.setup {
@@ -62,5 +61,29 @@ vim.api.nvim_create_autocmd('FileType', {
 --     },
 --   },
 -- }
+
+vim.lsp.config('roslyn', {
+  on_attach = function()
+    require('telescope').setup {
+      defaults = {
+        file_ignore_patterns = { 'bin', 'obj', '.git', 'node_modules' },
+        path_display = { 'truncate' },
+      },
+    }
+  end,
+  settings = {
+    ['csharp|completion'] = {
+      dotnet_provide_regex_completions = true,
+      dotnet_show_name_completion_suggestions = true,
+    },
+    ['csharp|inlay_hints'] = {
+      csharp_enable_inlay_hints_for_implicit_object_creation = true,
+      csharp_enable_inlay_hints_for_implicit_variable_types = true,
+    },
+    ['csharp|code_lens'] = {
+      dotnet_enable_references_code_lens = true,
+    },
+  },
+})
 
 return {}
