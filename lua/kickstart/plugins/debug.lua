@@ -145,48 +145,67 @@ return {
       },
     }
 
-    -- dap.configurations.cs = {
-    --   {
-    --     type = 'coreclr',
-    --     name = 'Launch - .NET',
-    --     request = 'launch',
-    --     -- program = function()
-    --     --   return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-    --     -- end,
-    --     program = function()
-    --       local co = coroutine.running()
-    --       return coroutine.create(function()
-    --         local actions = require 'telescope.actions'
-    --         local action_state = require 'telescope.actions.state'
-    --         local pickers = require 'telescope.pickers'
-    --         local finders = require 'telescope.finders'
-    --         local conf = require('telescope.config').values
+    -- NOTE: Auto Build but failed when build took too long
+    -- dap.listeners.before.launch.dotnet_build = function()
+    --   vim.notify('Running dotnet build…', vim.log.levels.INFO)
     --
-    --         local dlls = vim.fn.globpath(vim.fn.getcwd() .. '/bin/Debug', '**/*.dll', false, true)
+    --   local result = vim.system({ 'dotnet', 'build' }, { text = true }):wait() -- IMPORTANT
     --
-    --         pickers
-    --           .new({}, {
-    --             prompt_title = 'Select .NET DLL',
-    --             finder = finders.new_table(dlls),
-    --             sorter = conf.generic_sorter {},
-    --             attach_mappings = function(_, map)
-    --               map('i', '<CR>', function(bufnr)
-    --                 local selection = action_state.get_selected_entry()
-    --                 actions.close(bufnr)
-    --                 coroutine.resume(co, selection[1])
-    --               end)
-    --               map('n', '<CR>', function(bufnr)
-    --                 local selection = action_state.get_selected_entry()
-    --                 actions.close(bufnr)
-    --                 coroutine.resume(co, selection[1])
-    --               end)
-    --               return true
-    --             end,
-    --           })
-    --           :find()
-    --       end)
-    --     end,
-    --   },
-    -- }
+    --   if result.code ~= 0 then
+    --     vim.notify('dotnet build failed:\n' .. (result.stderr or result.stdout), vim.log.levels.ERROR)
+    --     error 'dotnet build failed'
+    --   end
+    --
+    --   vim.notify('dotnet build succeeded', vim.log.levels.INFO)
+    -- end
+
+    -- NOTE: PICK ENVIRONMENT SETTINGS
+    local function pick_environment()
+      local choices = {
+        'Development',
+        'Staging',
+        'Production',
+      }
+
+      local choice = vim.fn.inputlist(vim.list_extend({ 'Select ASPNETCORE_ENVIRONMENT:' }, choices))
+
+      if choice < 1 or choice > #choices then
+        return 'Development' -- safe default
+      end
+
+      return choices[choice]
+    end
+
+    local mason_path = vim.fn.stdpath 'data' .. '/mason/packages/netcoredbg/netcoredbg/netcoredbg.exe'
+
+    local netcoredbg_adapter = {
+      type = 'executable',
+      command = mason_path,
+      args = { '--interpreter=vscode' },
+    }
+
+    dap.adapters.netcoredbg = netcoredbg_adapter -- needed for normal debugging
+    dap.adapters.coreclr = netcoredbg_adapter -- needed for unit test debugging
+
+    dap.configurations.cs = {
+      {
+        type = 'coreclr',
+        name = 'LAUNCH directly from nvim',
+        request = 'launch',
+        program = function()
+          return require('dap-dll-autopicker').build_dll_path()
+        end,
+
+        env = function()
+          local env = pick_environment()
+          vim.notify('Using environment: ' .. env, vim.log.levels.INFO)
+
+          return {
+            ASPNETCORE_ENVIRONMENT = env,
+            DOTNET_ENVIRONMENT = env,
+          }
+        end,
+      },
+    }
   end,
 }
