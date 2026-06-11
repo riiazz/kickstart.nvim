@@ -3,8 +3,8 @@ vim.keymap.set('i', 'jk', '<Esc>')
 vim.keymap.set('x', 'v', '<Esc>')
 vim.keymap.set('i', ';;', '<Esc>A;')
 vim.keymap.set('n', '<leader>pv', ':Ex<Enter>')
-vim.keymap.set('n', '<S-Tab>', ':bp<Enter>', { desc = 'Go to previous buffer' })
-vim.keymap.set('n', '<Tab>', ':bn<Enter>', { desc = 'Go to next buffer' })
+-- vim.keymap.set('n', '<S-Tab>', ':bp<Enter>', { desc = 'Go to previous buffer' })
+-- vim.keymap.set('n', '<Tab>', ':bn<Enter>', { desc = 'Go to next buffer' })
 vim.keymap.set('n', '<leader>b', '<C-6>', { desc = 'Go the most recently opened buffer' })
 
 -- Window keymap
@@ -84,6 +84,12 @@ vim.lsp.config('roslyn', {
       dotnet_enable_references_code_lens = true,
     },
   },
+})
+
+vim.lsp.config('gopls', {
+  on_attach = function(client, bufnr)
+    vim.opt_local.list = false
+  end,
 })
 
 return {}
